@@ -1,0 +1,12 @@
+﻿@page "/sessions/{sessionId}"
+
+@using PlanningPoker.Views;
+
+@inherits SessionBase;
+
+<h3>Session</h3>
+
+<h4>@BindingContext.Title</h4>
+<h5 class="text-muted">Host: @BindingContext.Host.Identity.Name</h5>
+
+<button @onclick="@(() => BindingContext.Start())">Start Session</button>

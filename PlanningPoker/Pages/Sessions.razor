@@ -1,0 +1,54 @@
+﻿@page "/sessions"
+
+@using PlanningPoker.Views;
+
+@inherits SessionsBase
+
+<h3>Sessions</h3>
+
+@if (Bind(vm => vm.Sessions) == null)
+{
+    <p>
+        <em>Loading...</em>
+    </p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>State</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var session in Bind(vm => vm.Sessions))
+            {
+                <tr>
+                    <td><a href="sessions/@session.Id">@session.Title</a></td>
+                    <td>@session.State.ToString()</td>
+                    <td>
+                        <button class="btn btn-link" 
+                                @onclick="@(() => BindingContext.RemoveSession(session.Id))">Delete</button>
+                        <button class="btn btn-link" 
+                                @onclick="@(() => session.Start())"
+                                disabled="@(session.State > Data.PlanningPokerSessionState.Lobby)">Start Session</button>
+                        <button class="btn btn-link" 
+                                @onclick="@(() => session.End())"
+                                disabled="@(session.State == Data.PlanningPokerSessionState.Complete)">End Session</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+<EditForm Model="@BindingContext.NewSession" OnValidSubmit="@BindingContext.CreateSessionAsync">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <InputText @bind-Value="BindingContext.NewSession.Title"></InputText>
+
+    <button type="submit" class="btn btn-primary">Create Session</button>
+</EditForm>
