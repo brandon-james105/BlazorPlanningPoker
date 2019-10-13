@@ -1,6 +1,7 @@
 ﻿@page "/sessions"
 
 @using PlanningPoker.Views;
+@using PlanningPoker.ViewModels;
 
 @inherits SessionsBase
 
@@ -23,20 +24,26 @@ else
             </tr>
         </thead>
         <tbody>
-            @foreach (var session in Bind(vm => vm.Sessions))
+            @foreach (SessionViewModel session in Bind(vm => vm.Sessions))
             {
                 <tr>
                     <td><a href="sessions/@session.SessionId">@session.Title</a></td>
-                    <td>@session.State.ToString()</td>
+                    <td>@Bind(session, x => x.State)</td>
                     <td>
-                        <button class="btn btn-link" 
-                                @onclick="@(() => BindingContext.RemoveSession(session.SessionId))">Delete</button>
-                        <button class="btn btn-link" 
+                        <button class="btn btn-link"
+                                @onclick="@(() => BindingContext.RemoveSession(session.SessionId))">
+                            Delete
+                        </button>
+                        <button class="btn btn-link"
                                 @onclick="@(() => session.Start())"
-                                disabled="@(session.State > Data.PlanningPokerSessionState.Lobby)">Start Session</button>
-                        <button class="btn btn-link" 
+                                disabled="@(Bind(session, x => x.State) > Data.PlanningPokerSessionState.Lobby)">
+                            Start Session
+                        </button>
+                        <button class="btn btn-link"
                                 @onclick="@(() => session.End())"
-                                disabled="@(session.State == Data.PlanningPokerSessionState.Complete)">End Session</button>
+                                disabled="@(Bind(session, x => x.State) == Data.PlanningPokerSessionState.Complete)">
+                            End Session
+                        </button>
                     </td>
                 </tr>
             }
