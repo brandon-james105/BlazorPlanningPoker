@@ -1,12 +1,22 @@
-﻿@page "/sessions/{sessionId}"
+﻿@page "/sessions/{SessionId}"
 
 @using PlanningPoker.Views;
+
 
 @inherits SessionBase;
 
 <h3>Session</h3>
 
-<h4>@BindingContext.Title</h4>
-<h5 class="text-muted">Host: @BindingContext.Host.Identity.Name</h5>
+<h4>@BindingContext.Session.Title</h4>
+<h5 class="text-muted">Host: @BindingContext.Session.Host.Identity.Name</h5>
 
-<button @onclick="@(() => BindingContext.Start())">Start Session</button>
+<button class="btn btn-primary"
+        @onclick="@(() => BindingContext.Session.Start())"
+        disabled="@(BindingContext.Session.State > Data.PlanningPokerSessionState.Lobby)">
+    Start Session
+</button>
+<button class="btn btn-secondary"
+        @onclick="@(() => BindingContext.Session.End())"
+        disabled="@(BindingContext.Session.State == Data.PlanningPokerSessionState.Complete)">
+    End Session
+</button>

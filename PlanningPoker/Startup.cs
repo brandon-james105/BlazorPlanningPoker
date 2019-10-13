@@ -35,8 +35,9 @@ namespace PlanningPoker
             services.AddMvvm();
             services.AddSingleton<WeatherForecastService>();
             services.AddSingleton<IPlanningPokerSessionManager, PlanningPokerSessionManager>();
-            services.AddScoped<SessionsViewModel>();
-            services.AddScoped<SessionViewModel>();
+            services.AddTransient<SessionListViewModel>();
+            services.AddTransient<SessionViewModel>();
+            services.AddTransient<SessionDetailViewModel>();
 
             services.AddResponseCompression(opts =>
             {

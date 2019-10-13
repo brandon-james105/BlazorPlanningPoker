@@ -7,8 +7,7 @@ using System;
 
 namespace PlanningPoker.Views
 {
-    [Authorize]
-    public class SessionBase : MvvmComponentBase<SessionViewModel>
+    public class SessionBase : MvvmComponentBase<SessionDetailViewModel>
     {
         [Parameter]
         public string SessionId { get; set; }

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -9,17 +10,13 @@ namespace PlanningPoker.Data
 {
     public interface IPlanningPokerSession
     {
-        string Id { get; set; }
+        string SessionId { get; set; }
 
         string Title { get; set; }
 
         PlanningPokerSessionState State { get; set; }
 
-        ISet<ClaimsPrincipal> ConnectedUsers { get; set; }
-
         ClaimsPrincipal Host { get; set; }
-
-        Stack<PlanningPokerPlay> Plays { get; set; }
 
         DateTime CreatedDateTime { get; set; }
 
@@ -29,7 +26,11 @@ namespace PlanningPoker.Data
 
         int MaxParticipants { get; set; }
 
-        ICollection<string> Stories { get; set; }
+        ObservableCollection<ClaimsPrincipal> ConnectedUsers { get; set; }
+
+        ObservableCollection<PlanningPokerPlay> Plays { get; set; }
+
+        ObservableCollection<string> Stories { get; set; }
 
         bool Start();
 

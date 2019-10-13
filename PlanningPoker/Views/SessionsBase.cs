@@ -13,8 +13,7 @@ using System.Threading.Tasks;
 
 namespace PlanningPoker.Views
 {
-    [Authorize]
-    public class SessionsBase : MvvmComponentBase<SessionsViewModel>
+    public class SessionsBase : MvvmComponentBase<SessionListViewModel>
     {
     }
 }

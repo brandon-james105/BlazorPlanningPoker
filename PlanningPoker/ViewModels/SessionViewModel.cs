@@ -1,4 +1,5 @@
-﻿using MvvmBlazor.ViewModel;
+﻿using Microsoft.AspNetCore.Components;
+using MvvmBlazor.ViewModel;
 using PlanningPoker.Data;
 using PlanningPoker.Services;
 using System;
@@ -12,19 +13,22 @@ namespace PlanningPoker.ViewModels
 {
     public class SessionViewModel : ViewModelBase, IPlanningPokerSession
     {
+        private string sessionId;
         private string title;
-        private string id;
         private PlanningPokerSessionState state;
         private ClaimsPrincipal host;
         private DateTime createdDateTime;
         private DateTime? startTime;
         private DateTime? endTime;
         private ObservableCollection<PlanningPokerPlay> plays;
+        private ObservableCollection<string> stories;
+        private int maxParticipants;
+        private ObservableCollection<ClaimsPrincipal> connectedUsers;
 
-        public string Id
+        public string SessionId
         {
-            get => id;
-            set => Set(ref id, value);
+            get => sessionId;
+            set => Set(ref sessionId, value);
         }
 
         public string Title
@@ -39,18 +43,10 @@ namespace PlanningPoker.ViewModels
             set => Set(ref state, value);
         }
 
-        public ObservableCollection<ClaimsPrincipal> ConnectedUsers { get; set; }
-
         public ClaimsPrincipal Host
         {
             get => host;
             set => Set(ref host, value);
-        }
-
-        public ObservableCollection<PlanningPokerPlay> Plays
-        {
-            get => plays; 
-            set => Set(ref plays, value);
         }
 
         public DateTime CreatedDateTime
@@ -71,20 +67,35 @@ namespace PlanningPoker.ViewModels
             set => Set(ref endTime, value);
         }
 
-        public int MaxParticipants { get; set; }
-
-        public ICollection<string> Stories { get; set; }
-
-        ISet<ClaimsPrincipal> IPlanningPokerSession.ConnectedUsers
+        public int MaxParticipants
         {
-            get => new HashSet<ClaimsPrincipal>(ConnectedUsers);
-            set => ConnectedUsers = new ObservableCollection<ClaimsPrincipal>(value);
+            get => maxParticipants;
+            set => Set(ref maxParticipants, value);
         }
 
-        Stack<PlanningPokerPlay> IPlanningPokerSession.Plays
+        public ObservableCollection<ClaimsPrincipal> ConnectedUsers
         {
-            get => new Stack<PlanningPokerPlay>(Plays);
-            set => Plays = new ObservableCollection<PlanningPokerPlay>(value);
+            get => connectedUsers;
+            set => Set(ref connectedUsers, value);
+        }
+
+        public ObservableCollection<PlanningPokerPlay> Plays
+        {
+            get => plays;
+            set => Set(ref plays, value);
+        }
+
+        public ObservableCollection<string> Stories
+        {
+            get => stories;
+            set => Set(ref stories, value);
+        }
+
+        public SessionViewModel()
+        {
+            ConnectedUsers = new ObservableCollection<ClaimsPrincipal>();
+            Plays = new ObservableCollection<PlanningPokerPlay>();
+            Stories = new ObservableCollection<string>();
         }
 
         public bool Start()

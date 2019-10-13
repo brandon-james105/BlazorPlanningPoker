@@ -29,16 +29,18 @@ namespace PlanningPoker.Services
         {
             var session = new SessionViewModel
             {
-                Id = Guid.NewGuid().ToString(),
+#pragma warning disable BL0005 // Component parameter should not be set outside of its component.
+                SessionId = Guid.NewGuid().ToString(),
+#pragma warning restore BL0005 // Component parameter should not be set outside of its component.
                 Host = host,
                 Title = title
             };
 
-            Sessions.Add(session.Id, session);
+            Sessions.Add(session.SessionId, session);
 
             SessionCreated.Invoke(this, new SessionCreatedEventArgs(session));
 
-            return Sessions[session.Id];
+            return Sessions[session.SessionId];
         }
 
         public IPlanningPokerSession GetSession(string Id)
@@ -87,7 +89,8 @@ namespace PlanningPoker.Services
         {
             UserConnectedToSession(this, new UserConnectedToSessionEventArgs(user, Id));
 
-            return Sessions[Id].ConnectedUsers.Add(user);
+            Sessions[Id].ConnectedUsers.Add(user);
+            return true;
         }
 
         public bool DisconnectUserFromSession(ClaimsPrincipal user, string Id)
