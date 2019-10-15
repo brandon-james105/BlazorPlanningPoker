@@ -15,40 +15,18 @@
 }
 else
 {
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Title</th>
-                <th>State</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (SessionViewModel session in Bind(vm => vm.Sessions))
-            {
-                <tr>
-                    <td><a href="sessions/@session.SessionId">@session.Title</a></td>
-                    <td>@Bind(session, x => x.State)</td>
-                    <td>
-                        <button class="btn btn-link"
-                                @onclick="@(() => BindingContext.RemoveSession(session.SessionId))">
-                            Delete
-                        </button>
-                        <button class="btn btn-link"
-                                @onclick="@(() => session.Start())"
-                                disabled="@(Bind(session, x => x.State) > Data.PlanningPokerSessionState.Lobby)">
-                            Start Session
-                        </button>
-                        <button class="btn btn-link"
-                                @onclick="@(() => session.End())"
-                                disabled="@(Bind(session, x => x.State) == Data.PlanningPokerSessionState.Complete)">
-                            End Session
-                        </button>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
+    <div class="row">
+        @foreach (SessionViewModel session in Bind(vm => vm.Sessions))
+        {
+            <div class="card col-md-4" style="width: 18rem;">
+                <div class="card-body">
+                    <h5 class="card-title">@Bind(session, s => s.Title)</h5>
+                    <p class="card-text">@Bind(session, s => s.State)</p>
+                    <a href="sessions/@session.SessionId" class="btn btn-link">Go to Lobby</a>
+                </div>
+            </div>
+        }
+    </div>
 }
 
 <EditForm Model="@BindingContext.NewSession" OnValidSubmit="@BindingContext.CreateSessionAsync">

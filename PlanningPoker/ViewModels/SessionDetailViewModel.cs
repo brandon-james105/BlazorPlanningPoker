@@ -12,7 +12,7 @@ namespace PlanningPoker.ViewModels
     public class SessionDetailViewModel : ViewModelBase
     {
         private string sessionId;
-        private SessionViewModel sessionViewModel;
+        private IPlanningPokerSession sessionViewModel;
         private readonly IPlanningPokerSessionManager _sessionManager;
 
         [Parameter]
@@ -22,7 +22,7 @@ namespace PlanningPoker.ViewModels
             set => Set(ref sessionId, value);
         }
 
-        public SessionViewModel Session
+        public IPlanningPokerSession Session
         {
             get => sessionViewModel;
             set => Set(ref sessionViewModel, value);
@@ -35,7 +35,7 @@ namespace PlanningPoker.ViewModels
 
         public override Task OnInitializedAsync()
         {
-            Session = _sessionManager.GetSession(SessionId) as SessionViewModel;
+            Session = _sessionManager.GetSession(SessionId);
             return base.OnInitializedAsync();
         }
     }

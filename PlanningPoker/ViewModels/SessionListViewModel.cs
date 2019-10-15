@@ -26,14 +26,6 @@ namespace PlanningPoker.ViewModels
             set => Set(ref _newSession, value); 
         }
 
-        private IdentityUser _user;
-
-        public IdentityUser User 
-        {
-            get => _user; 
-            set => Set(ref _user, value); 
-        }
-
         private ObservableCollection<IPlanningPokerSession> _sessions;
 
         public ObservableCollection<IPlanningPokerSession> Sessions
@@ -81,12 +73,6 @@ namespace PlanningPoker.ViewModels
         public bool RemoveSession(string sessionId)
         {
             return _sessionManager.RemoveSession(sessionId);
-        }
-
-        public override Task OnInitializedAsync()
-        {
-
-            return base.OnInitializedAsync();
         }
     }
 }
