@@ -1,0 +1,43 @@
+﻿@page "/sessions"
+
+@using PlanningPoker.Views;
+@using PlanningPoker.ViewModels;
+
+@inherits SessionsListBase
+
+<div class="row text-dark">
+    <div class="col-md-12">
+        <div class="btn-group">
+            <a class="btn btn-light"
+               href="Sessions/Create"
+               data-toggle="tooltip"
+               data-placement="top"
+               title="Create">
+                <span class="oi oi-plus"></span>
+            </a>
+        </div>
+        <hr />
+    </div>
+</div>
+
+<h3>Sessions</h3>
+
+@if (Bind(vm => vm.Sessions).Count == 0)
+{
+    <p>No sessions have been created yet.</p>
+}
+else
+{
+    <div class="row">
+        @foreach (SessionViewModel session in Bind(vm => vm.Sessions))
+        {
+            <div class="card col-md-4" style="width: 18rem;">
+                <div class="card-body">
+                    <h5 class="card-title">@Bind(session, s => s.Title)</h5>
+                    <p class="card-text">@Bind(session, s => s.State)</p>
+                    <a href="sessions/@session.SessionId" class="btn btn-link">Go to Lobby</a>
+                </div>
+            </div>
+        }
+    </div>
+}

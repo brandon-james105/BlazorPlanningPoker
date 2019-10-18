@@ -26,18 +26,19 @@ namespace PlanningPoker
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
-        // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddRazorPages();
+            services.AddHttpContextAccessor();
             services.AddServerSideBlazor();
             services.AddMvvm();
-            services.AddSingleton<WeatherForecastService>();
             services.AddSingleton<IPlanningPokerSessionManager, PlanningPokerSessionManager>();
-            services.AddTransient<SessionListViewModel>();
-            services.AddTransient<SessionViewModel>();
-            services.AddTransient<SessionDetailViewModel>();
+            services.AddSingleton<IRepository<IPlanningPokerSession>, InMemorySessionRepository>();
+            services.AddScoped<SessionListViewModel>();
+            services.AddScoped<SessionViewModel>();
+            services.AddScoped<SessionDetailViewModel>();
+            services.AddScoped<SessionCreateViewModel>();
+            services.AddScoped<SessionEditViewModel>();
 
             services.AddResponseCompression(opts =>
             {
@@ -45,7 +46,6 @@ namespace PlanningPoker
             });
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.UseResponseCompression();
@@ -57,7 +57,6 @@ namespace PlanningPoker
             else
             {
                 app.UseExceptionHandler("/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
 

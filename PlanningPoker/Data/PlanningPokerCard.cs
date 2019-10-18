@@ -9,6 +9,18 @@ namespace PlanningPoker.Data
     {
         public string FrontDisplay { get; set; }
 
-        public double CardValue { get; set; }
+        public double Value { get; set; }
+
+        public PlanningPokerCard(double value)
+        {
+            Value = value;
+            FrontDisplay = Value.ToString();
+        }
+
+        public PlanningPokerCard(string frontDisplay, double value)
+        {
+            FrontDisplay = frontDisplay;
+            Value = value;
+        }
     }
 }

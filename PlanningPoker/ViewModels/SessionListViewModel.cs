@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Components.Authorization;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Http;
 using MvvmBlazor.ViewModel;
 using PlanningPoker.Data;
 using PlanningPoker.Events;
@@ -8,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
@@ -16,14 +16,11 @@ namespace PlanningPoker.ViewModels
     public class SessionListViewModel : ViewModelBase
     {
         private readonly IPlanningPokerSessionManager _sessionManager;
-        private readonly AuthenticationStateProvider _authenticationStateProvider;
-        
-        private IPlanningPokerSession _newSession;
+        private readonly IHttpContextAccessor _httpContext;
 
-        public IPlanningPokerSession NewSession 
+        public ClaimsPrincipal User
         {
-            get => _newSession; 
-            set => Set(ref _newSession, value); 
+            get => _httpContext.HttpContext.User;
         }
 
         private ObservableCollection<IPlanningPokerSession> _sessions;
@@ -35,21 +32,20 @@ namespace PlanningPoker.ViewModels
         }
 
         public SessionListViewModel(IPlanningPokerSessionManager sessionManager,
-                                    AuthenticationStateProvider authenticationStateProvider)
+                                    IHttpContextAccessor httpContext)
         {
             _sessionManager = sessionManager;
-            _authenticationStateProvider = authenticationStateProvider;
+            _httpContext = httpContext;
             Sessions = new ObservableCollection<IPlanningPokerSession>(sessionManager.GetSessions());
             sessionManager.SessionCreated += SessionManager_SessionCreated;
             sessionManager.SessionRemoved += SessionManager_SessionRemoved;
             sessionManager.SessionStateChanged += SessionManager_SessionStateChanged;
-            NewSession = new SessionViewModel();
         }
 
         private void SessionManager_SessionStateChanged(object sender, EventArgs e)
         {
             var eventArgs = (SessionStateChangedEventArgs)e;
-            Sessions.First(s => s.SessionId.ToString() == eventArgs.SessionId).State = eventArgs.State;
+            Sessions.First(s => s.SessionId == eventArgs.SessionId).State = eventArgs.State;
         }
 
         private void SessionManager_SessionCreated(object sender, EventArgs e)
@@ -59,15 +55,8 @@ namespace PlanningPoker.ViewModels
 
         private void SessionManager_SessionRemoved(object sender, EventArgs e)
         {
-            var session = Sessions.First(s => s.SessionId.ToString() == ((SessionRemovedEventArgs)e).SessionId);
+            var session = Sessions.First(s => s.SessionId == ((SessionRemovedEventArgs)e).SessionId);
             Sessions.Remove(session);
-        }
-
-        public async Task CreateSessionAsync()
-        {
-            var authState = await _authenticationStateProvider.GetAuthenticationStateAsync();
-            _sessionManager.CreateSession(authState.User, NewSession.Title);
-            NewSession = new SessionViewModel();
         }
 
         public bool RemoveSession(string sessionId)

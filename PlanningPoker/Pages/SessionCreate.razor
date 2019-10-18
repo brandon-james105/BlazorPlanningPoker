@@ -1,0 +1,94 @@
+﻿@page "/Sessions/Create"
+
+@using PlanningPoker.Views;
+
+@inherits SessionCreateBase;
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="btn-group">
+            <a class="btn btn-light"
+               href="Sessions"
+               data-toggle="tooltip"
+               data-placement="top"
+               title="All Sessions">
+                <span class="oi oi-list"></span>
+            </a>
+        </div>
+        <hr />
+    </div>
+</div>
+
+<h3>Create Session</h3>
+
+<div class="row">
+    <div class="col-md-12">
+        <form @onsubmit="BindingContext.CreateSession">
+            <div class="form-row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="session-title">Title</label>
+                        <input type="text"
+                               class="form-control"
+                               id="session-title"
+                               placeholder="Title"
+                               @bind="BindingContext.NewSession.Title"
+                               autocomplete="off"
+                               required />
+                    </div>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="col-md-4">
+                    <h4>Stories</h4>
+                    <p hidden="@(Bind(BindingContext.NewSession, vm => vm.Stories).Count > 0)">No stories have been added to this session</p>
+                    <div class="list-group">
+                        @foreach (var story in Bind(vm => vm.Stories))
+                        {
+                            <li class="list-group-item">
+                                <div class="input-group">
+                                    <input type="text"
+                                           class="form-control border-0"
+                                           placeholder="Story Text"
+                                           aria-label="Story Text"
+                                           @bind="story.Text" />
+                                    <div class="input-group-append">
+                                        <button type="button"
+                                                class="btn btn-link text-danger" @onclick="(() => BindingContext.Stories.Remove(story))">
+                                            <span class="oi oi-trash"></span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </li>
+                        }
+                    </div>
+                    <h4>Add Story</h4>
+                    <div class="input-group mb-3">
+                        <input type="text"
+                               class="form-control"
+                               placeholder="Story Title"
+                               aria-label="Add Story"
+                               aria-describedby="add-story-btn"
+                               autocomplete="off"
+                               @bind="BindingContext.NewStory.Text"
+                               @onfocus="BindingContext.FocusStoryInput"
+                               @onblur="BindingContext.BlurStoryInput" />
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-secondary"
+                                    type="submit"
+                                    id="add-story-btn"
+                                    @onclick="BindingContext.AddStory">
+                                Add
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="col-md-4">
+                    <button type="submit" class="btn btn-primary" disabled="@(Bind(BindingContext.NewSession, vm => vm.Stories).Count == 0)">Create Session</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

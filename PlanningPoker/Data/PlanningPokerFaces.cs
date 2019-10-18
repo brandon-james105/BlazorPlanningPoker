@@ -16,32 +16,33 @@ namespace PlanningPoker.Data
         Fourty,
         OneHundred,
         Unsure,
-        Coffee
+        Coffee,
+        Infinity
     }
 
-    public partial class Constants
+    public static partial class Constants
     {
-        public IDictionary<double, PlanningPokerFace> PlanningPokerFaces { get; set; }
-
-        public Constants()
+        public static IDictionary<PlanningPokerFace, PlanningPokerCard> PlanningPokerFaces
         {
-            PlanningPokerFaces = new Dictionary<double, PlanningPokerFace>()
+            get => new Dictionary<PlanningPokerFace, PlanningPokerCard>()
             {
-                { 0, PlanningPokerFace.Zero },
-                { 0.5, PlanningPokerFace.OneHalf },
-                { 1, PlanningPokerFace.One },
-                { 2, PlanningPokerFace.Two },
-                { 3, PlanningPokerFace.Three },
-                { 5, PlanningPokerFace.Five },
-                { 8, PlanningPokerFace.Eight },
-                { 13, PlanningPokerFace.Thirteen },
-                { 20, PlanningPokerFace.Twenty },
-                { 40, PlanningPokerFace.Fourty },
-                { 100, PlanningPokerFace.OneHundred },
-                { -1, PlanningPokerFace.Unsure },
-                { -2, PlanningPokerFace.Coffee }
+                { PlanningPokerFace.Zero,       new PlanningPokerCard(0) },
+                { PlanningPokerFace.OneHalf,    new PlanningPokerCard("&frac12;", 0.5) },
+                { PlanningPokerFace.One,        new PlanningPokerCard(1) },
+                { PlanningPokerFace.Two,        new PlanningPokerCard(2) },
+                { PlanningPokerFace.Three,      new PlanningPokerCard(3) },
+                { PlanningPokerFace.Five,       new PlanningPokerCard(5) },
+                { PlanningPokerFace.Eight,      new PlanningPokerCard(8) },
+                { PlanningPokerFace.Thirteen,   new PlanningPokerCard(13) },
+                { PlanningPokerFace.Twenty,     new PlanningPokerCard(20) },
+                { PlanningPokerFace.Fourty,     new PlanningPokerCard(40) },
+                { PlanningPokerFace.OneHundred, new PlanningPokerCard(100) },
+                { PlanningPokerFace.Unsure,     new PlanningPokerCard("?", -1) },
+                { PlanningPokerFace.Coffee,     new PlanningPokerCard("&#x2615;", -2) },
+                { PlanningPokerFace.Infinity,   new PlanningPokerCard("&infin;", double.PositiveInfinity) } 
             };
         }
+
     }
 
 
